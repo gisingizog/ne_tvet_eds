@@ -1,0 +1,118 @@
+{
+    "swagger": "2.0",
+    "info":{
+        "version":"1.0.0",
+        "title":"TVET Equipment Distribution System",
+        "description":"Swagger Documentation for the TVET Equipment Distribution API"
+    },
+    "schemes":["http"],
+    "host":"localhost:3500",
+    "paths":{
+        "/users/user/create":{
+            "post":{
+                "description": "Create a new user",
+                "parameters": [
+                    {
+                        "name":"user",
+                        "in": "body",
+                        "description": "User object containing the details",
+                        "required": true,
+                        "schema": {
+                            "type":"object",
+                            "properties": {
+                                "emailAddress":{
+                                    "type":"string",
+                                    "description": "Email Address of the user"
+                                },
+                                "password":{
+                                    "type":"string",
+                                    "description": "Password of the user"
+                                }
+                            },
+                            "required": ["emailAddress","password"]
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201":{
+                        "description": "User created successfully",
+                        "schema":{
+                            "type":"object",
+                            "properties": {
+                                "id":{
+                                    "type":"integer",
+                                    "description": "The unique ID of the user"
+                                },
+                                "emailAddress":{
+                                    "type":"string",
+                                    "description": "The email address of the user"
+                                }
+                            }
+                        }
+                    },
+                    "500":{
+                        "description": "Error in creating the user",
+                        "schema":{
+                            "type":"object",
+                            "properties": {
+                                "message":{
+                                    "type":"string",
+                                    "description": "The message describing the error"
+                                }
+                            }
+                        }
+                    }
+                }  
+            }
+        },
+        "/users/all":{
+            "get":{
+                "description": "Get All Users in the system",
+                "responses": {
+                    "200":{
+                        "description": "Users found",
+                        "schema":{
+                            "type":"array",
+                            "items": {
+                                "type":"object",
+                                "properties": {
+                                    "id":{
+                                        "type":"integer",
+                                        "description": "The Unique ID of the user"
+                                    },
+                                    "emailAddress":{
+                                        "type":"string",
+                                        "description": "The email of the user existing in the database"
+                                    },
+                                    "password":{
+                                        "type":"string",
+                                        "description": "The hashed password of the user"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500":{
+                        "description": "Error while fetching the users",
+                        "schema":{
+                            "type":"object",
+                            "items": {
+                                "type":"object",
+                                "properties": {
+                                    "message":{
+                                        "type":"string",
+                                        "description": "The error message"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+            }
+        }
+        
+    }
+}
