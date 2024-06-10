@@ -38,6 +38,49 @@ User.getAll = (result)=>{
     })
 }
 
+User.getById = (id,result)=>{
+    const getByIdQuery = "SELECT * FROM users WHERE user_ID = ?";
+    pool.query(getByIdQuery,id,(err,res)=>{
+        if(err){
+            console.log(err);
+            result(err,null)
+            return;
+        }
+        if(res.length === 0){
+            result({kind: "NOT_FOUND"},null);
+            return
+        }
+        console.log(res)
+        result(null,res);
+        return
+    })
+}
+
+User.update = (id,user, result)=>{
+    const updateQuery = "UPDATE users SET email_Address = ? WHERE user_ID= ?";
+    pool.query(updateQuery, [user.emailAddress,id],(err,res)=>{
+        if(err){
+            console.log(err);
+            result(err,null);
+            return
+        }
+
+        else if(res.affectedRows===0){
+            result({kind:'NOT_FOUND'},null);
+            return
+        }
+        else{
+            const updatedUser = {
+                id:res.insertId,
+                emailAddress:user.emailAddress
+            }
+    
+            result(null,updatedUser);
+            return
+        }
+        
+    })
+}
 User.login = (emailAddress,result)=>{
     const getQuery = "SELECT * FROM users WHERE email_Address = ?";
     pool.query(getQuery,[emailAddress],(err,res)=>{
@@ -50,5 +93,6 @@ User.login = (emailAddress,result)=>{
         return
     })
 }
+
 
 module.exports = User;

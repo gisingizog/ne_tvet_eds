@@ -69,3 +69,56 @@ exports.login =  async (req,res)=>{
         console.log(error)
     }
 }
+
+exports.getUserById = async(req,res)=>{
+    const {id} = req.params;
+    try {
+        User.getById(id,(err,data)=>{
+            if(err){
+                if(err.kind === 'NOT_FOUND'){
+                    res.status(404).send({Failure:'USER_NOT_FOUND'});
+                    return;
+                }
+                else{
+                    res.status(500).send({Failure: 'ERROR_OCCURED',err})
+                }
+            }
+            else{
+                res.status(200).send({Success:'USER_FOUND',data});
+                return;
+            }
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.updateUser = (req,res)=>{
+    const {id} = req.params;
+    const {emailAddress} = req.body;
+    if(!emailAddress){
+        res.status(406).send({Warning:"INCOMPLETE_INPUT"});
+        console.log("INCOMPLETE_USER_INPUT")
+        return;
+    }   
+    try {    
+        const user = {emailAddress}
+        User.update(id,user,(err,data)=>{
+            if(err){
+                if(err.kind==='NOT_FOUND'){
+                    res.status(404).send({Failure:'USER_NOT_FOUND'});
+                    return
+                }
+                else{
+                    res.status(500).send({Failure:'ERROR_OCCURED',err});
+                }
+            }
+            
+            res.status(200).send({Success: 'USER_UPDATED_SUCCESSFULLY',data});
+            console.log(data);
+        })
+    } catch (error) {
+        console.log(error);
+        return
+    }
+}

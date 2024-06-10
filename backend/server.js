@@ -5,14 +5,13 @@ const dotenv = require('dotenv');
 dotenv.config();
 const pool = require('./src/config/db.config');
 const userRoutes = require('./src/routes/user.routes');
-const swaggerUi =  require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const {specs,swaggerUi} =  require('./swagger');
 const cors = require('cors');
 
 app.use(bodyParser.json());
 app.use(cors());
 app.use('/users',userRoutes);
-app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocument));
+app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(specs));
 
 const serverStart = () =>{
     app.listen(process.env.PORT ,()=>{
